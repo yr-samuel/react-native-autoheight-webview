@@ -15,8 +15,16 @@ import {
   shouldUpdate,
 } from './utils';
 
+const defaultProps = {
+  showsVerticalScrollIndicator: false,
+  showsHorizontalScrollIndicator: false,
+  originWhitelist: ['*'],
+  ...(Platform.OS === 'android' ? { scalesPageToFit: false } : {}),
+  ...(Platform.OS === 'ios' ? { viewportContent: 'width=device-width' } : {}),
+};
+
 const AutoHeightWebView = React.memo(
-  forwardRef((props, ref) => {
+  forwardRef((props = defaultProps, ref) => {
     const {
       style,
       onMessage,
@@ -113,24 +121,6 @@ AutoHeightWebView.propTypes = {
   scalesPageToFit: PropTypes.bool,
   source: PropTypes.object,
 };
-
-let defaultProps = {
-  showsVerticalScrollIndicator: false,
-  showsHorizontalScrollIndicator: false,
-  originWhitelist: ['*'],
-};
-
-Platform.OS === 'android' &&
-  Object.assign(defaultProps, {
-    scalesPageToFit: false,
-  });
-
-Platform.OS === 'ios' &&
-  Object.assign(defaultProps, {
-    viewportContent: 'width=device-width',
-  });
-
-AutoHeightWebView.defaultProps = defaultProps;
 
 const styles = StyleSheet.create({
   webView: {
